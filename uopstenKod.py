@@ -16,6 +16,7 @@ def parametri(N):
     res =[ ele for ele in itertools.product([0,1,2,3], repeat = N)]
     return res
 par=parametri(n)
+
 def merX(kpom,i):
     kpom.h(i)
     return kpom
@@ -28,16 +29,16 @@ def merY(kpom,i):
 def plotMapu(matrica, naslov):
     fig, ax = plt.subplots(figsize=(8,8))
 
-    cm=ax.matshow(matrica, cmap=plt.cm.Blues)
+    cm=ax.matshow(matrica)
     no_labels = len(matrica) # how many labels to see on axis x
     positions = np.arange(0,no_labels) # pixel count at label position
     labels = stanjastring # labels you want to see
     plt.xticks(positions, labels,rotation=90)
     plt.yticks(positions, labels)
 
-    for i in range(no_labels):
-        for j in range(no_labels):
-            c = matrica[j,i]
+#    for i in range(no_labels):
+#       for j in range(no_labels):
+#          c = matrica[j,i]
 
     plt.colorbar(cm)
     plt.title(naslov,y=-0.1)
@@ -93,8 +94,8 @@ for i in range (4**n):
     job.append(execute(wKolo[i], backend2, shots=1000))
     result.append(job[i].result())
     counts.append(result[i].get_counts(wKolo[i]))
-s= [ele for ele in itertools.product(['0','1'], repeat = n)]
 
+s= [ele for ele in itertools.product(['0','1'], repeat = n)]
 stanjastring=[]
 for i in s:
     pom=''
