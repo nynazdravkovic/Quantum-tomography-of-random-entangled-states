@@ -1,13 +1,14 @@
 import numpy as np
 import itertools
-import math
 import matplotlib.pyplot as plt
 import json
 
 # unesi broj qubita 
 n=5
-counts = open("dict.json","w")#kombinacija svih parametra, tip niz nizova intova
+with open('data.txt') as json_file:
+    counts = json.load(json_file)
 
+#kombinacija svih parametra, tip niz nizova intova
 def parametri(N):   
     res =[ ele for ele in itertools.product([0,1,2,3], repeat = N)]
     return res
@@ -76,3 +77,4 @@ for i in range (len(S)):
 densityMatrix=np.dot(1/(2**n),densityMatrix)
 plotMapu(densityMatrix.real,'real part-nasa matrica')
 plotMapu(densityMatrix.imag,'imag part-nasa matrica')
+print('done')

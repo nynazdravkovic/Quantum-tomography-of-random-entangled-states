@@ -1,13 +1,30 @@
 import numpy as np
 import itertools
-import qiskit 
-from qiskit import QuantumRegister, QuantumCircuit,ClassicalRegister, QuantumCircuit,execute, Aer
+from qiskit import QuantumRegister, QuantumCircuit,ClassicalRegister, execute, Aer
 import math
 import json
+from qiskit.providers.aer.noise import NoiseModel
+from qiskit.providers.aer.noise.errors import pauli_error, depolarizing_error
+
+
 n=5
 q=[]
 c=[]
 wKolo=[]
+
+def get_noise(p_meas,p_gate):
+
+    error_meas = pauli_error([('X',p_meas), ('I', 1 - p_meas)])
+    error_gate1 = depolarizing_error(p_gate, 1)
+    error_gate2 = error_gate1.tensor(error_gate1)
+
+    noise_model = NoiseModel()
+    noise_model.add_all_qubit_quantum_error(error_meas, "measure") # measurement error is applied to measurements
+    noise_model.add_all_qubit_quantum_error(error_gate1, ["x"]) # single qubit gate error is applied to x gates
+    noise_model.add_all_qubit_quantum_error(error_gate2, ["cx"]) # two qubit gate error is applied to cx gates
+        
+    return noise_model
+
 def parametri(N):   
     res =[ ele for ele in itertools.product([0,1,2,3], repeat = N)]
     return res
@@ -60,9 +77,13 @@ backend2 = Aer.get_backend('qasm_simulator')
 job=[]
 result=[]
 counts=[]
-for i in range (4**n):
-    job.append(execute(wKolo[i], backend2, shots=1000))
-    result.append(job[i].result())
-    counts.append(result[i].get_counts(wKolo[i]))
-json = json.dumps(counts)
+noise_model = get_noise(0.01,0.01)
 
+for i in range (4**n):
+    # job.append(execute(wKolo[i], backend2, shots=1000))
+    # result.append(job[i].result())
+    # counts.append(result[i].get_counts(wKolo[i]))
+    counts.append(execute( wKolo[i], Aer.get_backend('qasm_simulator'),noise_model=noise_model).result().get_counts())
+
+with open('data.txt', 'w') as outfile:
+    json.dump(counts, outfile)
