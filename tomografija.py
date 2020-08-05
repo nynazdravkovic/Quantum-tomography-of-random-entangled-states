@@ -16,7 +16,7 @@ par=parametri(n)
 
 def plotMapu(matrica, naslov):
     fig, ax = plt.subplots(figsize=(8,8))
-    cm=ax.matshow(matrica)
+    cm=ax.matshow(matrica, cmap=plt.cm.Blues)
     no_labels = len(matrica) # how many labels to see on axis x
     positions = np.arange(0,no_labels) # pixel count at label position
     labels = stanjastring # labels you want to see
@@ -27,7 +27,7 @@ def plotMapu(matrica, naslov):
 #          c = matrica[j,i]
     plt.colorbar(cm)
     plt.title(naslov,y=-0.1)
-    plt.savefig(naslov+'.png')
+    plt.savefig(naslov +'.png')
     plt.show()
 
 s= [ele for ele in itertools.product(['0','1'], repeat = n)]
