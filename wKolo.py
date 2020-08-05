@@ -5,24 +5,17 @@ import math
 import json
 from qiskit.providers.aer.noise import NoiseModel
 from qiskit.providers.aer.noise.errors import pauli_error, depolarizing_error
-
+from qiskit.ignis.mitigation.measurement import (complete_meas_cal,CompleteMeasFitter)
 
 n=5
 q=[]
 c=[]
 wKolo=[]
 
-def get_noise(p_meas,p_gate):
-
-    error_meas = pauli_error([('X',p_meas), ('I', 1 - p_meas)])
-    error_gate1 = depolarizing_error(p_gate, 1)
-    error_gate2 = error_gate1.tensor(error_gate1)
-
+def get_noise(p):
+    error_meas = pauli_error([('X',p), ('I', 1 - p)])
     noise_model = NoiseModel()
-    noise_model.add_all_qubit_quantum_error(error_meas, "measure") # measurement error is applied to measurements
-    noise_model.add_all_qubit_quantum_error(error_gate1, ["x"]) # single qubit gate error is applied to x gates
-    noise_model.add_all_qubit_quantum_error(error_gate2, ["cx"]) # two qubit gate error is applied to cx gates
-        
+    noise_model.add_all_qubit_quantum_error(error_meas, "measure") # measurement error is applied to measurements        
     return noise_model
 
 def parametri(N):   
@@ -37,6 +30,16 @@ def merY(kpom,i):
     kpom.s(i)
     kpom.h(i)
     return kpom
+
+def matricaZaGreske(brojQubita, noise_model):
+    qr = QuantumRegister(brojQubita)
+    meas_calibs, state_labels = complete_meas_cal(qr=qr, circlabel='mcal')
+    noise_model = get_noise(0.1)
+    backend = Aer.get_backend('qasm_simulator')
+    job = execute(meas_calibs, backend=backend, shots=1000, noise_model=noise_model)
+    cal_results = job.result()
+    meas_fitter = CompleteMeasFitter(cal_results, state_labels, circlabel='mcal')
+    return(meas_fitter.cal_matrix)
 
 for i in range(4**n):
     q.append(QuantumRegister(n))
@@ -77,13 +80,12 @@ backend2 = Aer.get_backend('qasm_simulator')
 job=[]
 result=[]
 counts=[]
-noise_model = get_noise(0.01,0.01)
+noise_model = get_noise(0.01)
 
 for i in range (4**n):
-    # job.append(execute(wKolo[i], backend2, shots=1000))
-    # result.append(job[i].result())
-    # counts.append(result[i].get_counts(wKolo[i]))
-    counts.append(execute( wKolo[i], Aer.get_backend('qasm_simulator'),noise_model=noise_model).result().get_counts())
-
+    results = execute( wKolo[i], Aer.get_backend('qasm_simulator'),noise_model=noise_model).result().get_counts()
+    counts.append(results)
+   
+    
 with open('data.txt', 'w') as outfile:
     json.dump(counts, outfile)
