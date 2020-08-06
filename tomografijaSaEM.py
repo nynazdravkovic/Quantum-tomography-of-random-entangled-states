@@ -8,16 +8,17 @@ Created on Thu Aug  6 11:51:05 2020
 import numpy as np
 import itertools
 import json
-from numpy.linalg import inv
 import matplotlib.pyplot as plt
+import scipy.linalg as la
 
 
 n=5
-with open('counts.txt') as json_file:
+with open('counts2.txt') as json_file:
     counts = json.load(json_file)
-M = np.load('matricaM.npy')
-invM = inv(M)
-print()
+M = np.load('matricaM2.npy')
+invM = la.inv(M)
+print(invM)
+
 s= [ele for ele in itertools.product(['0','1'], repeat = n)]
 stanjastring=[]
 for i in s:
@@ -35,8 +36,10 @@ for c in counts:
 def vratiLepDit(Not_Ordered,key_order):
     ordered_dict_items = [(k, Not_Ordered[k]) for k in key_order]
     return dict((x, y) for x, y in ordered_dict_items)
+
 matricaC=[]
 noviCounts=[]
+
 for c in counts:
     c1=vratiLepDit(c, stanjastring)
     vektor = list(c1.values())
@@ -44,6 +47,8 @@ for c in counts:
     cMit = np.dot(invM,vektor)   
     noviCounts.append(dict(zip(stanjastring, cMit)))
 counts = noviCounts
+
+
 def parametri(N):   
     res =[ ele for ele in itertools.product([0,1,2,3], repeat = N)]
     return res
@@ -81,7 +86,7 @@ for p in range(4**n):
         S[0]=1
     else:
         for j in range(2**n):
-            S[p]+=znak(par[p],s[j])*counts[p][stanjastring[j]]/1000
+            S[p]+=znak(par[p],s[j])*counts[p][stanjastring[j]]/10000
             #ovde sam kao uzela da zaokruzim stoksove par, nemamm pojma koliko je to pametno tako da se radi
             #S[p]=round(S[p],2)
 
@@ -96,6 +101,6 @@ densityMatrix=np.zeros((2**n,2**n),dtype=np.complex_)
 for i in range (len(S)):
     densityMatrix+=np.dot(S[i],tenzorski[i])
 densityMatrix=np.dot(1/(2**n),densityMatrix)
-plotMapu(densityMatrix.real,'real part - popravljena greskica')
-plotMapu(densityMatrix.imag,'imag part - popravljena greskica')
+plotMapu(densityMatrix.real,'real part - popravljena greskica, p=0.1')
+plotMapu(densityMatrix.imag,'imag part - popravljena greskica, p=0.1')
 print('done')

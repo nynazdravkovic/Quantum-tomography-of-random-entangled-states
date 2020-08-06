@@ -6,7 +6,7 @@ import json
 # unesi broj qubita 
 n=5
 #ucitavanje podataka koji dolaze iz koda za kolo
-with open('counts.txt') as json_file:
+with open('counts2.txt') as json_file:
     counts = json.load(json_file)
 # M = np.load('matricaM.npy')
 # invM = inv(M)
@@ -25,6 +25,17 @@ for c in counts:
         if (red in c)==False: 
             c.update({red:0})
 
+def vratiLepDit(Not_Ordered,key_order):
+    ordered_dict_items = [(k, Not_Ordered[k]) for k in key_order]
+    return dict((x, y) for x, y in ordered_dict_items)
+matricaC=[]
+noviCounts=[]
+
+for c in counts:
+    c1=vratiLepDit(c, stanjastring)
+    matricaC.append(c1)   
+
+counts = matricaC
 
 #kombinacija svih parametra, tip niz nizova intova
 def parametri(N):   
@@ -64,7 +75,7 @@ for p in range(4**n):
         S[0]=1
     else:
         for j in range(2**n):
-            S[p]+=znak(par[p],s[j])*counts[p][stanjastring[j]]/1000
+            S[p]+=znak(par[p],s[j])*counts[p][stanjastring[j]]/10000
             #ovde sam kao uzela da zaokruzim stoksove par, nemamm pojma koliko je to pametno tako da se radi
             #S[p]=round(S[p],2)
 

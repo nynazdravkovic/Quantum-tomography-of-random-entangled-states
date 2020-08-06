@@ -34,7 +34,6 @@ def merY(kpom,i):
 def matricaZaGreske(brojQubita, noise_model):
     qr = QuantumRegister(brojQubita)
     meas_calibs, state_labels = complete_meas_cal(qr=qr, circlabel='mcal')
-    noise_model = get_noise(0.1)
     backend = Aer.get_backend('qasm_simulator')
     job = execute(meas_calibs, backend=backend, shots=1000, noise_model=noise_model)
     cal_results = job.result()
@@ -80,10 +79,10 @@ backend2 = Aer.get_backend('qasm_simulator')
 job=[]
 result=[]
 counts=[]
-noise_model = get_noise(0.1)
+noise_model = get_noise(0.)
 matricaSaSumom=[]
 for i in range (4**n):
-    results = execute( wKolo[i], Aer.get_backend('qasm_simulator'),noise_model=noise_model).result().get_counts()
+    results = execute( wKolo[i], Aer.get_backend('qasm_simulator'),shots=10000, noise_model=noise_model).result().get_counts()
     counts.append(results)
 #dict cuvam pomocu json-a
 with open('counts2.txt', 'w') as outfile:
