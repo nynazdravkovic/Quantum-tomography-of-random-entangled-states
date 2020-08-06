@@ -1,16 +1,23 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Aug  6 11:51:05 2020
+
+@author: Nina
+"""
+
 import numpy as np
 import itertools
-import matplotlib.pyplot as plt
 import json
+from numpy.linalg import inv
+import matplotlib.pyplot as plt
 
-# unesi broj qubita 
+
 n=5
-#ucitavanje podataka koji dolaze iz koda za kolo
 with open('counts.txt') as json_file:
     counts = json.load(json_file)
-# M = np.load('matricaM.npy')
-# invM = inv(M)
-#kombinacije 0 i 1 koje cemo kasnije koristiti
+M = np.load('matricaM.npy')
+invM = inv(M)
+print()
 s= [ele for ele in itertools.product(['0','1'], repeat = n)]
 stanjastring=[]
 for i in s:
@@ -19,14 +26,24 @@ for i in s:
     for j in range(1,len(i)):
         pom+=i[j]
     stanjastring.append(pom)
-#updejtovanje dictonaryja jer ima prayne vrednosti tamo gde nije nista mereno
+
 for c in counts:
     for red in stanjastring:
         if (red in c)==False: 
             c.update({red:0})
 
-
-#kombinacija svih parametra, tip niz nizova intova
+def vratiLepDit(Not_Ordered,key_order):
+    ordered_dict_items = [(k, Not_Ordered[k]) for k in key_order]
+    return dict((x, y) for x, y in ordered_dict_items)
+matricaC=[]
+noviCounts=[]
+for c in counts:
+    c1=vratiLepDit(c, stanjastring)
+    vektor = list(c1.values())
+    matricaC.append(vektor)   
+    cMit = np.dot(invM,vektor)   
+    noviCounts.append(dict(zip(stanjastring, cMit)))
+counts = noviCounts
 def parametri(N):   
     res =[ ele for ele in itertools.product([0,1,2,3], repeat = N)]
     return res
@@ -79,8 +96,6 @@ densityMatrix=np.zeros((2**n,2**n),dtype=np.complex_)
 for i in range (len(S)):
     densityMatrix+=np.dot(S[i],tenzorski[i])
 densityMatrix=np.dot(1/(2**n),densityMatrix)
-plotMapu(densityMatrix.real,'real part - bez popravljanja greske')
-plotMapu(densityMatrix.imag,'imag part - bez popravljanja greske')
+plotMapu(densityMatrix.real,'real part - popravljena greskica')
+plotMapu(densityMatrix.imag,'imag part - popravljena greskica')
 print('done')
-
-
