@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Aug  6 16:18:33 2020
+
+@author: Nina
+"""
+
+
 import numpy as np
 import itertools
 from qiskit import QuantumRegister, QuantumCircuit,ClassicalRegister, execute, Aer
@@ -6,6 +14,7 @@ import json
 from qiskit.providers.aer.noise import NoiseModel
 from qiskit.providers.aer.noise.errors import pauli_error, depolarizing_error
 from qiskit.ignis.mitigation.measurement import (complete_meas_cal,CompleteMeasFitter)
+from qiskit import *
 
 n=5
 q=[]
@@ -30,17 +39,16 @@ def merY(kpom,i):
     kpom.s(i)
     kpom.h(i)
     return kpom
-
-def matricaZaGreske(brojQubita, noise_model):
-    qr = QuantumRegister(brojQubita)
-    meas_calibs, state_labels = complete_meas_cal(qr=qr, circlabel='mcal')
-    noise_model = get_noise(0.1)
-    backend = Aer.get_backend('qasm_simulator')
-    job = execute(meas_calibs, backend=backend, shots=1000, noise_model=noise_model)
-    cal_results = job.result()
-    meas_fitter = CompleteMeasFitter(cal_results, state_labels, circlabel='mcal')
-    return(meas_fitter.cal_matrix)
-
+#Pravim matricu M
+qr = QuantumRegister(5)
+meas_calibs, state_labels = complete_meas_cal(qr=qr, circlabel='mcal')
+noise_model = get_noise(0.1)
+backend = Aer.get_backend('qasm_simulator')
+job = execute(meas_calibs, backend=backend, shots=1000, noise_model=noise_model)
+cal_results = job.result()
+meas_fitter = CompleteMeasFitter(cal_results, state_labels, circlabel='mcal')
+M=meas_fitter.cal_matrix
+#Pravim Kolo
 for i in range(4**n):
     q.append(QuantumRegister(n))
     c.append(ClassicalRegister(n))
@@ -83,14 +91,19 @@ counts=[]
 noise_model = get_noise(0.1)
 matricaSaSumom=[]
 for i in range (4**n):
-    results = execute( wKolo[i], Aer.get_backend('qasm_simulator'),noise_model=noise_model).result().get_counts()
-    counts.append(results)
+    results = execute( wKolo[i], Aer.get_backend('qasm_simulator'), shots=10000, noise_model=noise_model).result().get_counts()
+    meas_filter = meas_fitter.filter
+    mitigated_results = meas_filter.apply(results)
+    mitigated_counts = mitigated_results.get_counts(wKolo[i])
+    counts.append(mitigated_counts)
+    matricaSaSumom.append(counts)
 #dict cuvam pomocu json-a
-with open('counts2.txt', 'w') as outfile:
-    json.dump(counts, outfile)
+with open('matricaSaSumom.txt', 'w') as outfile:
+    json.dump(matricaSaSumom, outfile)
 #np niz cuvam pomocu numpyja
-matricaM = matricaZaGreske(n, noise_model)
-np.save('matricaM2.npy', matricaM)
+np.save('matricaM2.npy', M)
+with open('mitigated_counts2.txt', 'w') as outfile:
+    json.dump(counts, outfile)
 
 
     
