@@ -14,7 +14,6 @@ import json
 from qiskit.providers.aer.noise import NoiseModel
 from qiskit.providers.aer.noise.errors import pauli_error, depolarizing_error
 from qiskit.ignis.mitigation.measurement import (complete_meas_cal,CompleteMeasFitter)
-from qiskit import *
 
 n=5
 q=[]
@@ -88,22 +87,20 @@ backend2 = Aer.get_backend('qasm_simulator')
 job=[]
 result=[]
 counts=[]
-noise_model = get_noise(0.1)
+noise_model = get_noise(0.05)
 matricaSaSumom=[]
 for i in range (4**n):
     results = execute( wKolo[i], Aer.get_backend('qasm_simulator'), shots=10000, noise_model=noise_model).result().get_counts()
     meas_filter = meas_fitter.filter
     mitigated_results = meas_filter.apply(results)
-    mitigated_counts = mitigated_results.get_counts(wKolo[i])
-    counts.append(mitigated_counts)
-    matricaSaSumom.append(counts)
+    #mitigated_counts = mitigated_results.get_counts()
+    matricaSaSumom.append(mitigated_results)
 #dict cuvam pomocu json-a
 with open('matricaSaSumom.txt', 'w') as outfile:
     json.dump(matricaSaSumom, outfile)
 #np niz cuvam pomocu numpyja
 np.save('matricaM2.npy', M)
-with open('mitigated_counts2.txt', 'w') as outfile:
-    json.dump(counts, outfile)
+
 
 
     

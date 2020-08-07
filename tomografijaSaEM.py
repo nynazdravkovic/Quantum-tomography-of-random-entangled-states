@@ -40,14 +40,21 @@ def vratiLepDit(Not_Ordered,key_order):
 matricaC=[]
 noviCounts=[]
 
+def vratiMatricu(lista):
+    matrica = np.ones((len(lista),1))
+    for i in range (0,len(lista)):
+        matrica[i][0] = lista[i]
+    return matrica
+    
+
 for c in counts:
     c1=vratiLepDit(c, stanjastring)
     vektor = list(c1.values())
-    matricaC.append(vektor)   
+    vektor = vratiMatricu(vektor)
+   # matricaC.append(vektor)   
     cMit = np.dot(invM,vektor)   
     noviCounts.append(dict(zip(stanjastring, cMit)))
 counts = noviCounts
-
 
 def parametri(N):   
     res =[ ele for ele in itertools.product([0,1,2,3], repeat = N)]
@@ -101,6 +108,6 @@ densityMatrix=np.zeros((2**n,2**n),dtype=np.complex_)
 for i in range (len(S)):
     densityMatrix+=np.dot(S[i],tenzorski[i])
 densityMatrix=np.dot(1/(2**n),densityMatrix)
-plotMapu(densityMatrix.real,'real part - popravljena greskica, p=0.1')
-plotMapu(densityMatrix.imag,'imag part - popravljena greskica, p=0.1')
+plotMapu(densityMatrix.real,'real part - popravljena greskica, p=0.05')
+plotMapu(densityMatrix.imag,'imag part - popravljena greskica, p=0.05')
 print('done')
