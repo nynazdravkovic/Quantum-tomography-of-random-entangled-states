@@ -91,8 +91,8 @@ densityMatrix=np.zeros((2**n,2**n),dtype=np.complex_)
 for i in range (len(S)):
     densityMatrix+=np.dot(S[i],tenzorski[i])
 densityMatrix=np.dot(1/(2**n),densityMatrix)
-plotMapu(densityMatrix.real,'real part - popravljena greska, qiskit fja')
-plotMapu(densityMatrix.imag,'imag part - popravljena greska, qiskit fja')
+plotMapu(densityMatrix.real,'real part - popravljena greska, qiskit fja, p=0.05')
+plotMapu(densityMatrix.imag,'imag part - popravljena greska, qiskit fja, p=0.05')
 print('done')
 
 
