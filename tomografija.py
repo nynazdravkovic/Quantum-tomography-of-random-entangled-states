@@ -5,10 +5,15 @@ import json
 
 # unesi broj qubita 
 n=5
-#ucitavanje podataka koji dolaze iz koda za kolo
-with open('counts2.txt') as json_file:
+###ucitavanje podataka koji dolaze iz koda za kolo kosi su mitigovani
+###kada pustas kod proveri za koji fajl pustas i proveri imena grafika
+with open('matricaSaSumomp=0.15.txt') as json_file:
     counts = json.load(json_file)
-print((counts[0]))
+###ucitavanje podataka koji dolaze iz koda za kolo 
+##kada pustas kod proveri za koji fajl pustas i proveri imena grafika
+# with open('countsp=0.15.txt') as json_file:
+#     counts = json.load(json_file)
+# print((counts[0]))
 # M = np.load('matricaM.npy')
 # invM = inv(M)
 #kombinacije 0 i 1 koje cemo kasnije koristiti
@@ -91,8 +96,10 @@ densityMatrix=np.zeros((2**n,2**n),dtype=np.complex_)
 for i in range (len(S)):
     densityMatrix+=np.dot(S[i],tenzorski[i])
 densityMatrix=np.dot(1/(2**n),densityMatrix)
-plotMapu(densityMatrix.real,'real part - bez popravljenja gresaka, qiskit fja, p=0.05')
-plotMapu(densityMatrix.imag,'imag part - bez popravljenja gresaka, qiskit fja, p=0.05')
+plotMapu(densityMatrix.real,'real part - popravljen sum, qiskit fja, p=0.15')
+plotMapu(densityMatrix.imag,'imag part - popravljen sum, qiskit fja, p=0.15')
+# plotMapu(densityMatrix.real,'real part - bez popravljanja suma, p=0.15')
+# plotMapu(densityMatrix.imag,'imag part - bez popravljanja suma, p=0.15')
 print('done')
 
 

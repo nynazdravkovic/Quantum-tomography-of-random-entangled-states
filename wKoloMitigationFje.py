@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Aug  6 16:18:33 2020
-
-@author: Nina
-"""
-
-
 import numpy as np
 import itertools
 from qiskit import QuantumRegister, QuantumCircuit,ClassicalRegister, execute, Aer
@@ -87,7 +79,7 @@ backend2 = Aer.get_backend('qasm_simulator')
 job=[]
 result=[]
 counts=[]
-noise_model = get_noise(0.05)
+noise_model = get_noise(0.15)
 matricaSaSumom=[]
 for i in range (4**n):
     results = execute( wKolo[i], Aer.get_backend('qasm_simulator'), shots=10000, noise_model=noise_model).result().get_counts()
@@ -96,10 +88,9 @@ for i in range (4**n):
     #mitigated_counts = mitigated_results.get_counts()
     matricaSaSumom.append(mitigated_results)
 #dict cuvam pomocu json-a
-with open('matricaSaSumom.txt', 'w') as outfile:
+with open('matricaSaSumomp=0.15.txt', 'w') as outfile:
     json.dump(matricaSaSumom, outfile)
-#np niz cuvam pomocu numpyja
-np.save('matricaM2.npy', M)
+
 
 
 

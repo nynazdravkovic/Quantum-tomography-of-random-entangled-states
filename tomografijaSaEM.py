@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Aug  6 11:51:05 2020
-
-@author: Nina
-"""
-
 import numpy as np
 import itertools
 import json
@@ -13,11 +6,10 @@ import scipy.linalg as la
 
 
 n=5
-with open('counts2.txt') as json_file:
+with open('countsp=0.15.txt') as json_file:
     counts = json.load(json_file)
-M = np.load('matricaM2.npy')
+M = np.load('matricaMp=0.15.npy')
 invM = la.inv(M)
-print(invM)
 
 s= [ele for ele in itertools.product(['0','1'], repeat = n)]
 stanjastring=[]
@@ -108,6 +100,6 @@ densityMatrix=np.zeros((2**n,2**n),dtype=np.complex_)
 for i in range (len(S)):
     densityMatrix+=np.dot(S[i],tenzorski[i])
 densityMatrix=np.dot(1/(2**n),densityMatrix)
-plotMapu(densityMatrix.real,'real part - popravljena greskica, p=0.05')
-plotMapu(densityMatrix.imag,'imag part - popravljena greskica, p=0.05')
+plotMapu(densityMatrix.real,'real part - popravljen sum, p=0.15')
+plotMapu(densityMatrix.imag,'imag part - popravljen sum, p=0.15')
 print('done')

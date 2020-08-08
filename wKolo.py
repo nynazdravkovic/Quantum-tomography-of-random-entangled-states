@@ -79,18 +79,18 @@ backend2 = Aer.get_backend('qasm_simulator')
 job=[]
 result=[]
 counts=[]
-noise_model = get_noise(0.05)
+noise_model = get_noise(0.15)
 matricaSaSumom=[]
 for i in range (4**n):
     results = execute( wKolo[i], Aer.get_backend('qasm_simulator'),shots=10000, noise_model=noise_model).result().get_counts()
     counts.append(results)
 #dict cuvam pomocu json-a
-with open('counts2.txt', 'w') as outfile:
+with open('countsp=0.15.txt', 'w') as outfile:
     json.dump(counts, outfile)
 #np niz cuvam pomocu numpyja
 matricaM = matricaZaGreske(n, noise_model)
 print(matricaM)
-np.save('matricaM2.npy', matricaM)
+np.save('matricaMp=0.15.npy', matricaM)
 
 
     
