@@ -8,7 +8,7 @@ import scipy.linalg as la
 n=5
 with open('countsp=0.15.txt') as json_file:
     counts = json.load(json_file)
-M = np.load('matricaMp=0.15.npy')
+M = np.load('matricaMp=0.2.npy')
 invM = la.inv(M)
 
 s= [ele for ele in itertools.product(['0','1'], repeat = n)]
