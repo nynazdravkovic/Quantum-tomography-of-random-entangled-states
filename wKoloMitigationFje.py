@@ -85,7 +85,6 @@ for i in range (4**n):
     results = execute( wKolo[i], Aer.get_backend('qasm_simulator'), shots=10000, noise_model=noise_model).result().get_counts()
     meas_filter = meas_fitter.filter
     mitigated_results = meas_filter.apply(results)
-    #mitigated_counts = mitigated_results.get_counts()
     matricaSaSumom.append(mitigated_results)
 #dict cuvam pomocu json-a
 with open('matricaSaSumomp=0.15.txt', 'w') as outfile:

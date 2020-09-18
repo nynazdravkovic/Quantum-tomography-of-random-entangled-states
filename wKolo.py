@@ -81,6 +81,7 @@ result=[]
 counts=[]
 noise_model = get_noise(0.15)
 matricaSaSumom=[]
+
 for i in range (4**n):
     results = execute( wKolo[i], Aer.get_backend('qasm_simulator'),shots=10000, noise_model=noise_model).result().get_counts()
     counts.append(results)

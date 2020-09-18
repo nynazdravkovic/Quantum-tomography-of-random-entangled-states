@@ -7,15 +7,16 @@ import json
 n=5
 ###ucitavanje podataka koji dolaze iz koda za kolo kosi su mitigovani
 ###kada pustas kod proveri za koji fajl pustas i proveri imena grafika
-with open('matricaSaSumomp=0.15.txt') as json_file:
-    counts = json.load(json_file)
-###ucitavanje podataka koji dolaze iz koda za kolo 
-##kada pustas kod proveri za koji fajl pustas i proveri imena grafika
-# with open('countsp=0.15.txt') as json_file:
+# with open('matricaSaSumomp=0.15.txt') as json_file:
 #     counts = json.load(json_file)
-# print((counts[0]))
-# M = np.load('matricaM.npy')
-# invM = inv(M)
+    
+###ucitavanje podataka koji dolaze iz koda za kolo 
+#kada pustas kod proveri za koji fajl pustas i proveri imena grafika
+with open('random1countsp=0.15.txt') as json_file:
+    counts = json.load(json_file)
+print((counts[0]))
+rhoTacno = np.load('random1tacno=0.2.npy')
+
 #kombinacije 0 i 1 koje cemo kasnije koristiti
 s= [ele for ele in itertools.product(['0','1'], repeat = n)]
 stanjastring=[]

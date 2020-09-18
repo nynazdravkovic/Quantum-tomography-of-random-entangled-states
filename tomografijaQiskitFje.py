@@ -4,7 +4,7 @@ Created on Sun Aug  9 13:59:00 2020
 
 @author: Nina
 """
-from qiskit.ignis.verification import state_tomography_circuits, StateTomographyFitter
+from qiskit.ignis.verification import process_tomography_circuits, ProcessTomographyFitterTomographyFitter
 from qiskit import(
   QuantumCircuit,
   execute,

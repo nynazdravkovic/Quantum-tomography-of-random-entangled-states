@@ -6,10 +6,11 @@ import scipy.linalg as la
 
 
 n=5
-with open('countsp=0.15.txt') as json_file:
+with open('random1countsp=0.15.txt') as json_file:
     counts = json.load(json_file)
-M = np.load('matricaMp=0.2.npy')
+M = np.load('random1matricaMp=0.15.npy')
 invM = la.inv(M)
+rhoTacno = np.load('random1tacno.npy')
 
 s= [ele for ele in itertools.product(['0','1'], repeat = n)]
 stanjastring=[]
@@ -43,7 +44,6 @@ for c in counts:
     c1=vratiLepDit(c, stanjastring)
     vektor = list(c1.values())
     vektor = vratiMatricu(vektor)
-   # matricaC.append(vektor)   
     cMit = np.dot(invM,vektor)   
     noviCounts.append(dict(zip(stanjastring, cMit)))
 counts = noviCounts
@@ -94,12 +94,26 @@ j = complex(0,1)
 matrica = [[[1,0],[0,1]],[[0,1],[1,0]],[[0,-j],[j,0]],[[1,0],[0,-1]]]
 tenzorski=[]
 for red in par:
-    tenzorski.append(np.kron(matrica[red[0]],np.kron(matrica[red[1]],np.kron(matrica[red[2]],np.kron(matrica[red[3]],matrica[red[4]])))))
+    tenzorski.append(np.kron(matrica[red[4]],np.kron(matrica[red[3]],np.kron(matrica[red[2]],np.kron(matrica[red[1]],matrica[red[0]])))))
 
 densityMatrix=np.zeros((2**n,2**n),dtype=np.complex_)
 for i in range (len(S)):
     densityMatrix+=np.dot(S[i],tenzorski[i])
 densityMatrix=np.dot(1/(2**n),densityMatrix)
+from scipy.linalg import sqrtm
+def fidelity(rho1,rho2):
+    a=np.matmul(rho2,sqrtm(rho1))
+    b=np.matmul(sqrtm(rho1),a)
+    c=sqrtm(b)
+    c.round(5)
+    tr = 0
+    for i in range(8):
+        tr+=c[i][i]
+    return(tr**2)
+
+print(fidelity(rhoTacno,densityMatrix))
+
 plotMapu(densityMatrix.real,'real part - popravljen sum, p=0.15')
+plotMapu(rhoTacno.real,'real part state simulator')
 plotMapu(densityMatrix.imag,'imag part - popravljen sum, p=0.15')
 print('done')
