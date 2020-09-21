@@ -15,11 +15,11 @@ from qiskit.providers.aer.noise import NoiseModel
 from qiskit.providers.aer.noise.errors import pauli_error
 from qiskit.ignis.mitigation.measurement import (complete_meas_cal,CompleteMeasFitter)
 import random
-n=5
+n=3
 q=[]
 c=[]
-n_s=6
-n_m=3
+n_s=4
+n_m=2
 kolo=[]
 
 
@@ -123,7 +123,7 @@ matricaSaSumom=[]
 
 
 for i in range (4**n):
-    results = execute( kolo[i], Aer.get_backend('qasm_simulator'),shots=10000, noise_model=noise_model).result().get_counts()
+    results = execute( kolo[i], Aer.get_backend('qasm_simulator'),shots=1000, noise_model=noise_model).result().get_counts()
     counts.append(results)
     
     

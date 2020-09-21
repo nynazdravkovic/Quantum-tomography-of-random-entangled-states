@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.linalg as la
 
 
-n=5
+n=3
 with open('random1countsp=0.15.txt') as json_file:
     counts = json.load(json_file)
 M = np.load('random1matricaMp=0.15.npy')
@@ -93,13 +93,18 @@ for p in range(4**n):
 j = complex(0,1)
 matrica = [[[1,0],[0,1]],[[0,1],[1,0]],[[0,-j],[j,0]],[[1,0],[0,-1]]]
 tenzorski=[]
+# ya 5 qubita
+# for red in par:
+#     tenzorski.append(np.kron(matrica[red[4]],np.kron(matrica[red[3]],np.kron(matrica[red[2]],np.kron(matrica[red[1]],matrica[red[0]])))))
+#ya 3 qubita
 for red in par:
-    tenzorski.append(np.kron(matrica[red[4]],np.kron(matrica[red[3]],np.kron(matrica[red[2]],np.kron(matrica[red[1]],matrica[red[0]])))))
+    tenzorski.append(np.kron(matrica[red[2]],np.kron(matrica[red[1]],matrica[red[0]])))
 
 densityMatrix=np.zeros((2**n,2**n),dtype=np.complex_)
 for i in range (len(S)):
     densityMatrix+=np.dot(S[i],tenzorski[i])
 densityMatrix=np.dot(1/(2**n),densityMatrix)
+densityMatrix=np.conj(densityMatrix)
 from scipy.linalg import sqrtm
 def fidelity(rho1,rho2):
     a=np.matmul(rho2,sqrtm(rho1))
